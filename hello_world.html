@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0"
+          charset="UTF-8">
+
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <style>
+        #game_name{
+            text-align: center;
+            font-family: Tahoma,sans-serif;
+            padding: 10px;
+            margin: 10px;
+            background-color: #EFEFEF;
+            border-radius: 10px;
+            display:block!important;
+        }
+
+        button{
+            display: inline;
+            float: right;
+        }
+
+        h1{
+            padding: 10px;
+            display: inline ;
+        }
+
+        div{
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+
+        #dummy_arena{
+            visibility: visible;
+        }
+
+        #dummy_game{
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+
+        td{
+            text-align: center;
+            width: 100px;
+            height: 100px;
+            background-color: bisque;
+            border-radius: 7px;
+        }
+
+    </style>
+    <title>Title</title>
+</head>
+
+<body>
+<h1 id="game_name"> Tic Tac Toe </h1>
+
+<div id="dummy_arena">
+    <table id="dummy_game">
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+</div>
+
+<div id="div_for_react"></div>
+
+<div id="div_for_react2"></div>
+
+
+</body>
+
+<script type="text/babel">
+
+    class MyCustomComp extends React.Component{
+
+        render(){
+            return (
+
+                <div>
+                    <h1> Hello ... {this.props.name || "UNKNOWN"}</h1>
+                    <button   onClick={this.sayHelloToPerson}> Click here </button>
+                </div>
+
+            )
+        }
+
+        sayHelloToPerson = ()=> {
+            alert("hello " + this.props.name + "!")
+        }
+    }
+
+    class AnotherCustomComponent extends React.Component{
+
+        render(){
+            let parent_comp = []
+            const names = ["Nawal", "Deepak", "Tanuj", "Ganesh"]
+            for (const name in names) {
+                const child_comp = <MyCustomComp name={names[name]}/>
+                parent_comp.push(child_comp)
+            }
+            return (
+                parent_comp
+            )
+        }
+
+
+
+    }
+
+
+    ReactDOM.render(<AnotherCustomComponent/>, document.querySelector("#div_for_react"))
+
+
+
+    class Counter extends React.Component{
+        constructor(props) {
+            super(props);
+
+            this.state = {
+                count:0
+            }
+        }
+
+        render(){
+            return <div>
+                <h1> {this.state.count} </h1>
+                <button onClick={this.increment}> Increment </button>
+                <button onClick={this.decrement}> Decrement </button>
+            </div>
+        }
+
+        // // one way to do that
+        // increment = ()=> {
+        //     this.setState({
+        //
+        //         count: this.state.count + 1
+        //     })
+        // }
+
+
+        // better idea ...
+        increment = ()=> {
+            this.setState(oldState => ({
+                count : oldState.count + 1
+            }))
+        }
+
+        decrement = ()=> {
+            this.setState(oldState => ({
+                count : oldState.count - 1
+            }))
+        }
+
+    }
+
+
+    class OneMoreCustomComponent extends React.Component{
+
+        render(){
+            return (
+                <div>
+                    <Counter/>
+                    <Counter/>
+                    <Counter/>
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(<OneMoreCustomComponent/>, document.querySelector("#div_for_react2"))
+
+
+</script>
+
+
+
+</html>
