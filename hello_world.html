@@ -37,7 +37,7 @@
 
 
         #dummy_arena{
-            visibility: visible;
+            visibility: collapse;
         }
 
         #dummy_game{
@@ -52,6 +52,13 @@
             height: 100px;
             background-color: bisque;
             border-radius: 7px;
+        }
+
+        .correct_game{
+            color: black;
+        }
+        .incorrect_game{
+            color: red;
         }
 
     </style>
@@ -85,6 +92,8 @@
 <div id="div_for_react"></div>
 
 <div id="div_for_react2"></div>
+
+<div id="div_for_react3_game"></div>
 
 
 </body>
@@ -170,28 +179,109 @@
                 count : oldState.count - 1
             }))
         }
-
     }
-
 
     class OneMoreCustomComponent extends React.Component{
 
         render(){
             return (
                 <div>
+                    <hr/>
                     <Counter/>
                     <Counter/>
-                    <Counter/>
+                    <hr/>
                 </div>
             )
         }
     }
-
     ReactDOM.render(<OneMoreCustomComponent/>, document.querySelector("#div_for_react2"))
 
 
-</script>
+    class Game extends React.Component{
+        constructor(props) {
+            super(props);
+            this.state = {
+                first_num: Math.ceil(Math.random()*20),
+                second_num: Math.ceil(Math.random()*20),
+                score: 0,
+                answer:"",
+                incorrect: false
+            }
+        }
 
+        renderProblem(){
+            return(
+                <div>
+                    <hr/>
+                    <h2 className={this.state.incorrect?"incorrect_game":"correct_game"}> {this.state.first_num} + {this.state.second_num} </h2>
+                    <input onKeyPress={this.onKeyPress} onChange={this.onInputChange} placeholder="What do you think" value={this.state.answer}/>
+                    <div>
+                        Score: {this.state.score}
+                    </div>
+                    <hr/>
+                </div>
+            )
+        }
+
+        renderWin() {
+            return (
+                <div>
+                    <hr/>
+                    <div>
+                        Congratulations, You Win!! :)
+                    </div>
+                    <hr/>
+                </div>
+            )
+        }
+
+        render(){
+            if (this.state.score <= 10){
+                return this.renderProblem();
+            }else{
+                return this.renderWin()
+            }
+        }
+
+
+
+
+
+            onInputChange = (event)=> {
+            this.setState({
+                answer: event.target.value
+                }
+            )
+        }
+
+        onKeyPress = (event)=> {
+            if (event.key === "Enter"){
+                const user_answer = parseInt(this.state.answer)
+                const real_answer = this.state.first_num + this.state.second_num
+                if (real_answer === user_answer){
+                    this.setState(oldState => ({
+                        score: oldState.score + 1,
+                        first_num: Math.ceil(Math.random()*20),
+                        second_num: Math.ceil(Math.random()*20),
+                        // also make input available to type again
+                        answer:"",
+                        incorrect: false,
+                    }))
+                }else{
+                    this.setState(oldState => ({
+                        answer:"",
+                        incorrect: true,
+                    }))
+                }
+            }
+        }
+
+    }
+
+    ReactDOM.render(<Game/>, document.querySelector("#div_for_react3_game"))
+
+
+</script>
 
 
 </html>
