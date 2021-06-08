@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0"
+          charset="UTF-8">
+
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <style>
+        h1{
+            font-family: Tahoma,sans-serif;
+            text-align: center;
+        }
+
+        li{
+            padding: 2px;
+            margin: 2px;
+        }
+        button{
+            float: right;
+        }
+
+    </style>
+    <title>TODO</title>
+</head>
+
+<body>
+
+<h1> Tasks </h1>
+
+<div id="div_for_react"></div>
+
+
+</body>
+
+<script type="text/babel">
+
+    class App extends React.Component{
+
+        constructor() {
+            super();
+            this.state = {
+                tasks : ["Nawal", "Made", "This"],
+                current_task: ""
+            }
+        }
+
+        render(){
+            let tasks = []
+            for (let i = 0; i < this.state.tasks.length; i++) {
+                // tasks.push(<li> {this.state.tasks[i]} </li>)
+                tasks.push(<div>
+                    <li key={i}> {this.state.tasks[i]} <button key={i} onClick={this.deleteTask}> Delete </button> </li>
+                </div>)
+            }
+            return(
+                <div>
+                    <h3> Number of tasks: {this.state.tasks.length} </h3>
+                    <ul>
+                        {tasks}
+                    </ul>
+                    <input placeholder="what else?" value={this.state.current_task} onKeyPress={this.onKeyPressed} onChange={this.onInputChange}/>
+
+                </div>)
+        }
+
+        onInputChange = (event)=>{
+            this.setState({
+                current_task: event.target.value
+            })
+        }
+
+        onKeyPressed = (event)=>{
+            if (event.key === "Enter" && event.target.value.trim() !== '' ){
+                this.setState(oldState=>({
+                    tasks: [...oldState.tasks, event.target.value],
+                    current_task: ""
+                }))
+            }
+        }
+
+        deleteTask = ()=>{
+            this.setState(oldState =>({
+                tasks: oldState.tasks.splice(this.params.key,1)
+            }))
+        }
+
+    }
+
+
+
+    ReactDOM.render(<App/>, document.querySelector("#div_for_react"))
+
+
+</script>
+
+
+</html>
